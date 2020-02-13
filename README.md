@@ -26,11 +26,11 @@ The SAT Solver used in the project is [MiniSat](http://minisat.se/). This is a f
 
 This is the structure of the project:
 
-[structure1](crossword_structure1.png)
+![structure1](crossword_structure1.png)
 
 app.py manages the interaction between the different parts of the project. The following image shows the details about how the parts interact:
 
-[structure2](crossword_structure2.png)
+![structure2](crossword_structure2.png)
 
 ### input_generator.py
 
