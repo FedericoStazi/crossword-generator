@@ -71,3 +71,9 @@ This is the simplest approach to the problem, since it runs the SAT Solver and k
 
 #### Running the SAT Solver many times
 This is still a quite simple approach, but can give some improvements if a a lot of computation time is available. This function runs the SAT Solver, but stops it after a given time. If the SAT Solver is stopped, it starts again with a different (random) output. It is only effective on inputs that are not too easy but not too hard to solve.
+
+#### Learn from previous random tests
+By giving a score to some easier tests, it is possible to understand which words are easier to use in the SAT Solver, and this information can be used to find the final result.
+
+#### Get the maximum/minimum of a condition
+This approach is udeful because normally, using CNFs, it is impossible to set the value of something to be as big as possible or as low as possible. In order to do that, a linear search or binary search can be used. A good example of this is trying to minimize the size of the table. The function would start by fixing the size to a given value, and, if the CNF is satisfiable with the value, the value is reduced by one and the algorithm starts again. It will eventually stop when the value of the size is so small that the CNF is unsatisfiable or the SAT Solver takes more time than the given limit. The same result can be obtained using binary search, but in such a small table the time gain would not be relevant compared to the time used by the SAT Solver.
