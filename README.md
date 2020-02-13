@@ -20,3 +20,30 @@ The values of the variables that satisfy the equation are the solution of the eq
 
 ### The SAT Solver used in the project
 The SAT Solver used in the project is [MiniSat](http://minisat.se/). This is a free SAT Solver that the script runs on the Unix shell. It can however be easily changed if needed.
+
+
+## Structure
+
+This is the structure of the project:
+
+[structure1](crossword_structure1.png)
+
+app.py manages the interaction between the different parts of the project. The following image shows the details about how the parts interact:
+
+[structure2](crossword_structure2.png)
+
+### input_generator.py
+
+### cnf_generator.py
+
+### cnf_parser.py
+
+### sat_solver.py
+
+### result_parser.py
+
+### crossword_printer.py
+
+### var_to_string.py
+
+### app.py
