@@ -50,6 +50,7 @@ def generate(input):
             for w in range(len(words_flat)):
                 output.append(vts.v(i,j,w,1) + ' ' + vts.V(i,j))
 
+    # 2 or more consecutive letters are part of a word
     for i in range(width):
         for j in range(height):
 
