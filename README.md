@@ -64,6 +64,29 @@ This is the main script of the project because it calls all the other functions 
 
 ## CNF constraints
 
+### Input data
+
+Some of the constranints imposed in the CNF can vary in different ways. The choices are generated in the `input_generator` script, and passed to `cnf_generator` using the `input` dictionary. This contains the following fields:
+
+- #### width
+The width of the crossword. Together with height, these are the only parameters chosen in `app.py` because of their importance in how long the SAT Solver will take to find a solution to the CNF.
+
+- #### height
+The height of the crossword. Together with width, these are the only parameters chosen in `app.py` because of their importance in how long the SAT Solver will take to find a solution to the CNF.
+
+- #### black_cells
+Some random cells are initially chosen to be black, and are stored as pairs in this list. This ensures that non-trivial solutions are found, and that different solutions are generated when running the script on the same set of words multiple times. This is especially useful when the other constraints are less strict. If there are many strict constraints, it is a good choice to have no cell in the list.
+
+- #### words
+The words in the crossword are chosen from a dictionary. It is good to have a big dictionary and choosing words randomly to get different results when running the script multiple times.
+
+`words` is a list of lists. Words are grouped in sublists because the SAT Solver doesn't have to use all the words, but just one for each group. There is an important tradeoff in this choice:
+
+- There are many possible choices of words. For example in a 10 words crossword, with 20 words in the list divided into groups of 2, there are 2^10 possible combinations of words.
+- This additional constraint adds a lot of complexity to the CNF, slowing it down significantly.
+
+However, the generator can divide words into groups of size 1, so that there is no difference with a simple list of words where all words must be used.
+
 ### Variables
 
 These are the variables used in the CNF.
@@ -98,14 +121,61 @@ A ⇒ B ≡ ¬A ∨ B
 
 The following constraints are necessary for the CNF to produce a valid crossword.
 
+
+- #### If and only if condition for H
+This is the definition of H_i,j:
+
+H_i,j ⇔ ∪ h_i,j,w
+
+It can be transformed in the following CNF:
+
+(¬H_i,j ∨ ∪ h_i,j,w) ∧ ∩ (¬h_i,j,w ∨ H_i,j)
+
+This how the CNF can be derived:
+
+**TODO** add LaTeX derivation. 
+
+- #### If and only if condition for V
+This is the definition of V_i,j:
+
+V_i,j ⇔ ∪ v_i,j,w
+
+It can be transformed in the following CNF:
+
+(¬V_i,j ∨ ∪ v_i,j,w) ∧ ∩ (¬v_i,j,w ∨ V_i,j)
+
+The CNF can be derived in the same way as with H.
+
+- #### At least one symbol in each cell
+
+Each cell must contain at least one symbol. For each cell (i,j), the CNF clause is:
+
+∪ c_i,j,s
+
+- #### At most one symbol in each cell
+
+Each cell can contain at most one symbol. This constraint, combined with the previous one, ensures that each cell contains exactly one symbol. For each cell (i,j), the CNF clause is (where a and b are different symbols):
+
+¬c_i,j,a ∧ ¬c_i,j,b
+
+This clause is derived from:
+
+c_i,j,a ⇒ ¬c_i,j,b 
+
+which imposes that, if a is in cell (i,j), then b can't be there.
+
+- #### One word for each group must be in the table
+
+
+
 ### Optional constraints
 
 The following constraints are **not** necessary for the CNF to produce a valid crossword. They are however used to improve the quality of the crossword, especially avoiding trivial solutions.
 
 - #### Random black cells
-Some random cells are initially chosen to be black. (The list of cells is in the `black_cells` field of `input`). This ensures non-trivial solutions, and different solutions if running the script on the same set of words. For these cells: 
+The cells in `black_cells` must have the symbol '/'. Therefore for each of these cells (i,j), the following clause is in the CNF: 
 
-c_i,j,/ = true
+c_i,j,/
 
 ## Strategies
 
