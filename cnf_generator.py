@@ -68,7 +68,7 @@ def generate(input):
                     vts.V(i,j)
                 )
 
-    # at least one letter in each cell
+    # at least one symbol in each cell
     for i in range(width):
         for j in range(height):
             letters = []
@@ -77,7 +77,7 @@ def generate(input):
             output.append(' '.join(letters))
 
 
-    # every cell has at most one letter
+    # every cell has at most one symbol
     for i in range(width):
         for j in range(height):
             for a in alphabet:
