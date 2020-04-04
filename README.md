@@ -54,7 +54,7 @@ This script runs the SAT Solver, either with a time limit or with no time limit.
 This script converts the output in the DIMACS CNF format into a dictionary containing the words, their startin position and their direction (down or across).
 
 - ### `crossword_printer.py`
-This script prints the crossword in the terminal or as a pdf (*TODO*)
+This script prints the crossword in the terminal or as a pdf (*not yet implemented*)
 
 - ### `var_to_string.py`
 This script is used by other scripts to get the strings that represent variables by calling some functions instead of having to deal with strings directly. Because of its secondary role in the project, it is not included in the diagrams.
@@ -115,6 +115,7 @@ A ⇒ B ≡ ¬A ∨ B
 
 - #### De Morgan's Laws
 ¬(A ∧ B) ≡ ¬A ∨ ¬B
+
 ¬(A ∨ B) ≡ ¬A ∧ ¬B
 
 ### Necessary constraints
@@ -166,7 +167,66 @@ which imposes that, if a is in cell (i,j), then b can't be there.
 
 - #### One word for each group must be in the table
 
+For each group of words (defined [here](#words)), one word must be in the crossword. Imposing this condition is quite expensive because there is no variable indicating if a word is used or not. Only a single long clause is needed for each group:
 
+∪ h_i,j,w ∨ v_i,j,w
+
+- #### Each word at most once in the table
+
+Each word can be at most once in the table. This is one of the most expensive conditions in the CNF, because it takes many clauses, in the order of O((height * width)^2). For each word w and for each pair of cells (i1,j1) and (i2,j2), the following implications must hold.
+
+(h_i1,j1,w ⇒ ¬v_i1,j1,w) ∧
+(v_i1,j1,w ⇒ ¬h_i1,j1,w)
+
+(h_i1,j1,w ⇒ ¬h_i2,j2,w ∧ ¬v_i2,j2,w) ∧
+(v_i1,j1,w ⇒ ¬h_i2,j2,w ∧ ¬v_i2,j2,w)
+
+What they mean is that, if a word is in (i1,j1) in a certain direction, it can't be in the same place in the other direction, or anywhere else in the table. They can be transformed in a CNF in the following way:
+
+(h_i1,j1,w ⇒ ¬v_i2,j2,w) ∧ (h_i1,j1,w ⇒ ¬h_i2,j2,w) ∧ (v_i1,j1,w ⇒ ¬v_i2,j2,w)
+
+(¬h_i1,j1,w ∨ ¬v_i2,j2,w) ∧ (¬h_i1,j1,w ∨ ¬h_i2,j2,w) ∧ (¬v_i1,j1,w ∨ ¬v_i2,j2,w)
+
+- #### For each word the correct symbols are in the table
+
+If a words starts in a given cell in a certain direction, then all of the following cells should contain the correct symbol. This also means that the cells before and after the word contain /, or are outside the grid. Let c0,c1,c2...cn be the characters of the word. Then, for each cell (i,j) and for each word w:
+
+(h_i,j,w ⇒ c_i-1,j,/) ∧ (h_i,j,w ⇒ c_i+n,j,/) ∧ ∩ (h_i,j,w ⇒ c_i+k,j,ck) 
+
+(v_i,j,w ⇒ c_i,j-1,/) ∧ (v_i,j,w ⇒ c_i,j+n,/) ∧ ∩ (v_i,j,w ⇒ c_i,j+k,ck) 
+
+Expressed as a CNF, it becomes:
+
+(¬h_i,j,w ∨ c_i-1,j,/) ∧ (¬h_i,j,w ∨ c_i+n,j,/) ∧ ∩ (¬h_i,j,w ∨ c_i+k,j,ck) 
+
+(¬v_i,j,w ∨ c_i,j-1,/) ∧ (¬v_i,j,w ∨ c_i,j+n,/) ∧ ∩ (¬v_i,j,w ∨ c_i,j+k,ck) 
+
+- #### No word can go out of the grid
+To make sure that no word can extend over the limit of the grid, the starting points that are too close to the borders should be false. Therefore, for each word w of length n:
+
+For i from width - n + 1 to width - 1:
+
+¬h_i,j,w
+
+For j from height - n + 1 to height - 1:
+
+¬v_i,j,w
+
+- #### 2 or more consecutive letters are part of a word
+
+If this constraint is needed for the crossword depends how a crossword is defined. Ensuring that 2 or more consecutive letters are part of a word extremely reduces the number of solutions, but gives much more realistic results, and is included for this reason.
+
+A simple way to translate this condition is that, if a cell is black, then it must be followed (in both directions) by a word, a black cell or a letter and then a black cell (if it is not too close to the border). This translates into the following clauses, that hold for each cell (i,j):
+
+c_i-1,j,/ ⇒ H_i,j ∨ c_i,j,/ ∨ c_i+1,j,/
+
+c_i,j-1,/ ⇒ V_i,j ∨ c_i,j,/ ∨ c_i,j+1,/
+
+The implications in the CNF become (where variables c_-1,j,/ and c_i,-1,/ are removed if present):
+
+c_i-1,j,/ ∨ H_i,j ∨ c_i,j,/ ∨ c_i+1,j,/
+
+c_i,j-1,/ ∨ V_i,j ∨ c_i,j,/ ∨ c_i,j+1,/
 
 ### Optional constraints
 
