@@ -33,7 +33,7 @@ This is the structure of the project:
 
 ![structure2](crossword_structure2.png)
 
-- ### `input_generator.py`
+- #### `input_generator.py`
 This script generates the input as a dictionary. This dictionary contains some information such as:
 - height and width of the table
 - the list of words, divided into groups
@@ -41,25 +41,25 @@ This script generates the input as a dictionary. This dictionary contains some i
 
 This script is crucial because it contains the constraints that can make the crossword better or worse, but that are not necessary in a valid crossword. These constraints must be chosen carefully because, if there are too many, the SAT solver will not be able to find a solution in a resonable time. The choice of the constraints is discussed [below](#cnf-constraints).
 
-- ### `cnf_generator.py`
+- #### `cnf_generator.py`
 This script takes the input dictionary and returns the cnf written in an easily readable format. It enforces the constraints necessary for a valid crossword, but also the additional ones contained in the input dictionary. How the cnf describes the constraints of a crossword is described [below](#cnf-constraints).
 
-- ### `cnf_parser.py`
+- #### `cnf_parser.py`
 This script translates the cnf in the DIMACS CNF format. The main difference between this and the format used before is that in this one the variables' names are consecutive numbers, while in the output produced by cnf_generator.py the variables' names are string. This passage is useful because having a readable CNF makes debugging much easier.
 
-- ### `sat_solver.py`
+- #### `sat_solver.py`
 This script runs the SAT Solver, either with a time limit or with no time limit. It is made in such a way that if the SAT Solver changes, this is the only file that has to be changed (unless the new SAT Solver does not use the DIMACS CNF format).
 
-- ### `result_parser.py`
+- #### `result_parser.py`
 This script converts the output in the DIMACS CNF format into a dictionary containing the words, their startin position and their direction (down or across).
 
-- ### `crossword_printer.py`
+- #### `crossword_printer.py`
 This script prints the crossword in the terminal or as a pdf (*not yet implemented*)
 
-- ### `var_to_string.py`
+- #### `var_to_string.py`
 This script is used by other scripts to get the strings that represent variables by calling some functions instead of having to deal with strings directly. Because of its secondary role in the project, it is not included in the diagrams.
 
-- ### `app.py`
+- #### `app.py`
 This is the main script of the project because it calls all the other functions in the project. In addition to that, it can use many different strategies, which are described below.
 
 ## CNF constraints
@@ -68,16 +68,16 @@ This is the main script of the project because it calls all the other functions 
 
 Some of the constranints imposed in the CNF can vary in different ways. The choices are generated in the `input_generator` script, and passed to `cnf_generator` using the `input` dictionary. This contains the following fields:
 
-- #### width
+- #### `width`
 The width of the crossword. Together with height, these are the only parameters chosen in `app.py` because of their importance in how long the SAT Solver will take to find a solution to the CNF.
 
-- #### height
+- #### `height`
 The height of the crossword. Together with width, these are the only parameters chosen in `app.py` because of their importance in how long the SAT Solver will take to find a solution to the CNF.
 
-- #### black_cells
+- #### `black_cells`
 Some random cells are initially chosen to be black, and are stored as pairs in this list. This ensures that non-trivial solutions are found, and that different solutions are generated when running the script on the same set of words multiple times. This is especially useful when the other constraints are less strict. If there are many strict constraints, it is a good choice to have no cell in the list.
 
-- #### words
+- #### `words`
 The words in the crossword are chosen from a dictionary. It is good to have a big dictionary and choosing words randomly to get different results when running the script multiple times.
 
 `words` is a list of lists. Words are grouped in sublists because the SAT Solver doesn't have to use all the words, but just one for each group. There is an important tradeoff in this choice:
@@ -91,19 +91,19 @@ However, the generator can divide words into groups of size 1, so that there is 
 
 These are the variables used in the CNF.
 
-- #### c_i,j,s
+- #### `c_i,j,s`
 c_i,j,s is true if cell (i,j) contains symbol s. s could be an alphabet letter or '/' if the cell is black.
 
-- #### h_i,j,w
+- #### `h_i,j,w`
 h_i,j,w is true if word w is horizontal and starts from cell (i,j). (w in an index). 
 
-- #### v_i,j,w
+- #### `v_i,j,w`
 v_i,j,w is true if word w is vertical and starts from cell (i,j). (w in an index).
 
-- #### H_i,j
+- #### `H_i,j`
 H_i,j is true if any word is horizontal and starts from cell (i,j). H_i,j = ∪ h_i,j,w
 
-- #### V_i,j
+- #### `V_i,j`
 V_i,j is true if any word is vertical and starts from cell (i,j). V_i,j = ∪ v_i,j,w
 
 ### Logic identities
