@@ -15,8 +15,6 @@ def generate(width, height):
     all_words = json.loads(words_file.read())
     words_file.close()
 
-    #1,1,2,2,3,3
-
     count = {
         '2': (5, 1),
         '3': (5, 1),
@@ -34,8 +32,6 @@ def generate(width, height):
             for i in range(group_size):
                 group.append(random.choice(all_words[x]))
             words.append(group)
-
-    print(words) #TODO remove
 
     input = {}
 
