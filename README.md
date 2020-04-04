@@ -64,7 +64,26 @@ This is the main script of the project because it calls all the other functions 
 
 ## CNF constraints
 
-**TODO**
+### Variables
+
+- #### c_i,j,s
+c_i,j,s is true if cell (i,j) contains symbol s. s could be an alphabet letter or '/' if the cell is black.
+
+- #### h_i,j,w
+h_i,j,w is true if word w is horizontal and starts from cell (i,j). (w in an index). 
+
+- #### v_i,j,w
+v_i,j,w is true if word w is vertical and starts from cell (i,j). (w in an index).
+
+- #### H_i,j
+H_i,j is true if any word is horizontal and starts from cell (i,j). H_i,j = ∪ h_i,j,w
+
+- #### V_i,j
+V_i,j is true if any word is vertical and starts from cell (i,j). V_i,j = ∪ v_i,j,w
+
+### Constraints
+
+TODO
 
 ## Strategies
 
