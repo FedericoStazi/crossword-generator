@@ -250,3 +250,11 @@ By giving a score to some easier tests, it is possible to understand which words
 
 - #### Get the maximum/minimum of a condition
 This approach is useful because normally, using CNFs, it is impossible to set the value of something to be as big as possible or as low as possible. In order to do that, a linear search or binary search can be used. A good example of this is trying to minimize the size of the table. The function would start by fixing the size to a given value, and, if the CNF is satisfiable with the value, the value is reduced by one and the algorithm starts again. It will eventually stop when the value of the size is so small that the CNF is unsatisfiable or that the SAT Solver takes more time than the given time limit. The same result can be obtained using binary search, but in this task the time gain would not be relevant compared to the time used by the SAT Solver.
+
+## Results
+
+These are some of the best final results obtained using the script.
+
+*TODO*
+
+## Author ?
