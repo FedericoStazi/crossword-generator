@@ -36,7 +36,7 @@ This is the structure of the project:
 - ### `input_generator.py`
 This script generates the input as a dictionary. This dictionary contains some information such as:
 - height and width of the table
-- the list of words
+- the list of words, divided into groups
 - a list of cells that must be black in the table
 
 This script is crucial because it contains the constraints that can make the crossword better or worse, but that are not necessary in a valid crossword. These constraints must be chosen carefully because, if there are too many, the SAT solver will not be able to find a solution in a resonable time. The choice of the constraints is discussed [below](#cnf-constraints).
@@ -66,6 +66,8 @@ This is the main script of the project because it calls all the other functions 
 
 ### Variables
 
+These are the variables used in the CNF.
+
 - #### c_i,j,s
 c_i,j,s is true if cell (i,j) contains symbol s. s could be an alphabet letter or '/' if the cell is black.
 
@@ -81,9 +83,29 @@ H_i,j is true if any word is horizontal and starts from cell (i,j). H_i,j = ∪ 
 - #### V_i,j
 V_i,j is true if any word is vertical and starts from cell (i,j). V_i,j = ∪ v_i,j,w
 
-### Constraints
+### Logic identities
 
-TODO
+This is a list of some of the logic identities used when deriving constraints.
+
+- #### Implication as disjunction
+A ⇒ B ≡ ¬A ∨ B
+
+- #### De Morgan's Laws
+¬(A ∧ B) ≡ ¬A ∨ ¬B
+¬(A ∨ B) ≡ ¬A ∧ ¬B
+
+### Necessary constraints
+
+The following constraints are necessary for the CNF to produce a valid crossword.
+
+### Optional constraints
+
+The following constraints are **not** necessary for the CNF to produce a valid crossword. They are however used to improve the quality of the crossword, especially avoiding trivial solutions.
+
+- #### Random black cells
+Some random cells are initially chosen to be black. (The list of cells is in the `black_cells` field of `input`). This ensures non-trivial solutions, and different solutions if running the script on the same set of words. For these cells: 
+
+c_i,j,/ = true
 
 ## Strategies
 
