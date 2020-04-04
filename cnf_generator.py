@@ -14,13 +14,14 @@ def generate(input):
 
     width = input["width"]
     height = input["height"]
+    black_cells = input["black_cells"]
     words = input["words"]
     words_flat = [item for sublist in input["words"] for item in sublist]
 
     alphabet = (list(string.ascii_lowercase)) + [BLACK_CELL]
 
     # black cells
-    for (i,j) in input["black_cells"]:
+    for (i,j) in black_cells:
         output.append(vts.c(i,j,BLACK_CELL))
 
     # iff conditions for H
