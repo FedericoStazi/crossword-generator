@@ -263,9 +263,7 @@ This approach is useful because normally, using CNFs, it is impossible to set th
 
 Some really simple metrics used to evaluate a crossword are:
 
-- number of letters to number of cells ratio (letters/cells)
-
-- number of letters used by 2 words to number of letters ratio (crossings/letters)
+- number of letters to number of cells ratio (letters/cells) (if a cell contains a letter used by two words, it is counted twice)
 
 #### Initial
 
