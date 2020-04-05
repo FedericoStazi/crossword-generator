@@ -134,7 +134,13 @@ It can be transformed in the following CNF:
 
 This how the CNF can be derived:
 
-**TODO** add LaTeX derivation. 
+H_i,j ⇔ ∪ h_i,j,w
+
+(¬H_i,j ⇒ ∪ h_i,j,w) ∧ (∪ h_i,j,w ⇒ H_i,j)
+
+(¬H_i,j ⇒ ∪ h_i,j,w) ∧ ∩ (h_i,j,w ⇒ H_i,j)
+
+(¬H_i,j ∨ ∪ h_i,j,w) ∧ ∩ (¬h_i,j,w ∨ H_i,j)
 
 - #### If and only if condition for V
 This is the definition of V_i,j:
@@ -253,8 +259,53 @@ This approach is useful because normally, using CNFs, it is impossible to set th
 
 ## Results
 
-These are some of the best final results obtained using the script.
+- #### Metrics
 
-*TODO*
+Some really simple metrics used to evaluate a crossword are:
+- number of letters to number of cells ratio (letters/cells)
+- number of letters used by 2 words to number of letters ratio (crossings/letters)
 
-## Author ?
+- #### Initial
+
+This is one of the best results obtained using the script so far.
+
+```
+b l o w / s h a k e
+r / n / / / / / / n
+i / / c / / a s / t
+n / j o y / / i / i
+g o / t / m / m / r
+/ / / t i e / i c e
+/ p / o / n / l / /
+p a i n t / l a n d
+/ i / / / / / r / /
+/ d / m a r k / o f
+
+ACROSS
+(0, 0): bring
+(0, 2): on
+(0, 9): entire
+(2, 3): cotton
+(2, 7): similar
+(4, 5): men
+(6, 1): paid
+
+DOWN
+(0, 0): blow
+(0, 5): shake
+(2, 6): as
+(3, 2): joy
+(4, 0): go
+(5, 3): tie
+(5, 7): ice
+(7, 0): paint
+(7, 6): land
+(9, 3): mark
+(9, 8): of
+
+letters/cells = 70/100 = 0.35
+```
+
+## Author
+
+* **Federico Stazi** - [FedericoStazi](https://github.com/FedericoStazi)
