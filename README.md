@@ -33,7 +33,7 @@ This is the structure of the project:
 
 ![structure2](crossword_structure2.png)
 
-- #### `input_generator.py`
+#### `input_generator.py`
 This script generates the input as a dictionary. This dictionary contains some information such as:
 - height and width of the table
 - the list of words, divided into groups
@@ -41,25 +41,25 @@ This script generates the input as a dictionary. This dictionary contains some i
 
 This script is crucial because it contains the constraints that can make the crossword better or worse, but that are not necessary in a valid crossword. These constraints must be chosen carefully because, if there are too many, the SAT solver will not be able to find a solution in a resonable time. The choice of the constraints is discussed [below](#cnf-constraints).
 
-- #### `cnf_generator.py`
+#### `cnf_generator.py`
 This script takes the input dictionary and returns the cnf written in an easily readable format. It enforces the constraints necessary for a valid crossword, but also the additional ones contained in the input dictionary. How the cnf describes the constraints of a crossword is described [below](#cnf-constraints).
 
-- #### `cnf_parser.py`
+#### `cnf_parser.py`
 This script translates the cnf in the DIMACS CNF format. The main difference between this and the format used before is that in this one the variables' names are consecutive numbers, while in the output produced by cnf_generator.py the variables' names are string. This passage is useful because having a readable CNF makes debugging much easier.
 
-- #### `sat_solver.py`
+#### `sat_solver.py`
 This script runs the SAT Solver, either with a time limit or with no time limit. It is made in such a way that if the SAT Solver changes, this is the only file that has to be changed (unless the new SAT Solver does not use the DIMACS CNF format).
 
-- #### `result_parser.py`
+#### `result_parser.py`
 This script converts the output in the DIMACS CNF format into a dictionary containing the words, their startin position and their direction (down or across).
 
-- #### `crossword_printer.py`
+#### `crossword_printer.py`
 This script prints the crossword in the terminal or as a pdf (*not yet implemented*)
 
-- #### `var_to_string.py`
+#### `var_to_string.py`
 This script is used by other scripts to get the strings that represent variables by calling some functions instead of having to deal with strings directly. Because of its secondary role in the project, it is not included in the diagrams.
 
-- #### `app.py`
+#### `app.py`
 This is the main script of the project because it calls all the other functions in the project. In addition to that, it can use many different strategies, which are described below.
 
 ## CNF constraints
@@ -68,16 +68,16 @@ This is the main script of the project because it calls all the other functions 
 
 Some of the constranints imposed in the CNF can vary in different ways. The choices are generated in the `input_generator` script, and passed to `cnf_generator` using the `input` dictionary. This contains the following fields:
 
-- #### `width`
+#### `width`
 The width of the crossword. Together with height, these are the only parameters chosen in `app.py` because of their importance in how long the SAT Solver will take to find a solution to the CNF.
 
-- #### `height`
+#### `height`
 The height of the crossword. Together with width, these are the only parameters chosen in `app.py` because of their importance in how long the SAT Solver will take to find a solution to the CNF.
 
-- #### `black_cells`
+#### `black_cells`
 Some random cells are initially chosen to be black, and are stored as pairs in this list. This ensures that non-trivial solutions are found, and that different solutions are generated when running the script on the same set of words multiple times. This is especially useful when the other constraints are less strict. If there are many strict constraints, it is a good choice to have no cell in the list.
 
-- #### `words`
+#### `words`
 The words in the crossword are chosen from a dictionary. It is good to have a big dictionary and choosing words randomly to get different results when running the script multiple times.
 
 `words` is a list of lists. Words are grouped in sublists because the SAT Solver doesn't have to use all the words, but just one for each group. There is an important tradeoff in this choice:
@@ -91,29 +91,29 @@ However, the generator can divide words into groups of size 1, so that there is 
 
 These are the variables used in the CNF.
 
-- #### `c_i,j,s`
+#### `c_i,j,s`
 c_i,j,s is true if cell (i,j) contains symbol s. s could be an alphabet letter or '/' if the cell is black.
 
-- #### `h_i,j,w`
+#### `h_i,j,w`
 h_i,j,w is true if word w is horizontal and starts from cell (i,j). (w in an index). 
 
-- #### `v_i,j,w`
+#### `v_i,j,w`
 v_i,j,w is true if word w is vertical and starts from cell (i,j). (w in an index).
 
-- #### `H_i,j`
+#### `H_i,j`
 H_i,j is true if any word is horizontal and starts from cell (i,j). H_i,j = ∪ h_i,j,w
 
-- #### `V_i,j`
+#### `V_i,j`
 V_i,j is true if any word is vertical and starts from cell (i,j). V_i,j = ∪ v_i,j,w
 
 ### Logic identities
 
 This is a list of some of the logic identities used when deriving constraints.
 
-- #### Implication as disjunction
+#### Implication as disjunction
 A ⇒ B ≡ ¬A ∨ B
 
-- #### De Morgan's Laws
+#### De Morgan's Laws
 ¬(A ∧ B) ≡ ¬A ∨ ¬B
 
 ¬(A ∨ B) ≡ ¬A ∧ ¬B
@@ -123,7 +123,7 @@ A ⇒ B ≡ ¬A ∨ B
 The following constraints are necessary for the CNF to produce a valid crossword.
 
 
-- #### If and only if condition for H
+#### If and only if condition for H
 This is the definition of H_i,j:
 
 H_i,j ⇔ ∪ h_i,j,w
@@ -142,7 +142,7 @@ H_i,j ⇔ ∪ h_i,j,w
 
 (¬H_i,j ∨ ∪ h_i,j,w) ∧ ∩ (¬h_i,j,w ∨ H_i,j)
 
-- #### If and only if condition for V
+#### If and only if condition for V
 This is the definition of V_i,j:
 
 V_i,j ⇔ ∪ v_i,j,w
@@ -153,13 +153,13 @@ It can be transformed in the following CNF:
 
 The CNF can be derived in the same way as with H.
 
-- #### At least one symbol in each cell
+#### At least one symbol in each cell
 
 Each cell must contain at least one symbol. For each cell (i,j), the CNF clause is:
 
 ∪ c_i,j,s
 
-- #### At most one symbol in each cell
+#### At most one symbol in each cell
 
 Each cell can contain at most one symbol. This constraint, combined with the previous one, ensures that each cell contains exactly one symbol. For each cell (i,j), the CNF clause is (where a and b are different symbols):
 
@@ -171,13 +171,13 @@ c_i,j,a ⇒ ¬c_i,j,b
 
 which imposes that, if a is in cell (i,j), then b can't be there.
 
-- #### One word for each group must be in the table
+#### One word for each group must be in the table
 
 For each group of words (defined [here](#words)), one word must be in the crossword. Imposing this condition is quite expensive because there is no variable indicating if a word is used or not. Only a single long clause is needed for each group:
 
 ∪ h_i,j,w ∨ v_i,j,w
 
-- #### Each word at most once in the table
+#### Each word at most once in the table
 
 Each word can be at most once in the table. This is one of the most expensive conditions in the CNF, because it takes many clauses, in the order of O((height * width)^2). For each word w and for each pair of cells (i1,j1) and (i2,j2), the following implications must hold.
 
@@ -193,7 +193,7 @@ What they mean is that, if a word is in (i1,j1) in a certain direction, it can't
 
 (¬h_i1,j1,w ∨ ¬v_i2,j2,w) ∧ (¬h_i1,j1,w ∨ ¬h_i2,j2,w) ∧ (¬v_i1,j1,w ∨ ¬v_i2,j2,w)
 
-- #### For each word the correct symbols are in the table
+#### For each word the correct symbols are in the table
 
 If a words starts in a given cell in a certain direction, then all of the following cells should contain the correct symbol. This also means that the cells before and after the word contain /, or are outside the grid. Let c0,c1,c2...cn be the characters of the word. Then, for each cell (i,j) and for each word w:
 
@@ -207,7 +207,7 @@ Expressed as a CNF, it becomes:
 
 (¬v_i,j,w ∨ c_i,j-1,/) ∧ (¬v_i,j,w ∨ c_i,j+n,/) ∧ ∩ (¬v_i,j,w ∨ c_i,j+k,ck) 
 
-- #### No word can go out of the grid
+#### No word can go out of the grid
 To make sure that no word can extend over the limit of the grid, the starting points that are too close to the borders should be false. Therefore, for each word w of length n:
 
 For i from width - n + 1 to width - 1:
@@ -218,7 +218,7 @@ For j from height - n + 1 to height - 1:
 
 ¬v_i,j,w
 
-- #### 2 or more consecutive letters are part of a word
+#### 2 or more consecutive letters are part of a word
 
 If this constraint is needed for the crossword depends how a crossword is defined. Ensuring that 2 or more consecutive letters are part of a word extremely reduces the number of solutions, but gives much more realistic results, and is included for this reason.
 
@@ -238,34 +238,36 @@ c_i,j-1,/ ∨ V_i,j ∨ c_i,j,/ ∨ c_i,j+1,/
 
 The following constraints are **not** necessary for the CNF to produce a valid crossword. They are however used to improve the quality of the crossword, especially avoiding trivial solutions.
 
-- #### Random black cells
+#### Random black cells
 The cells in `black_cells` must have the symbol '/'. Therefore for each of these cells (i,j), the following clause is in the CNF: 
 
 c_i,j,/
 
 ## Strategies
 
-- #### Running the SAT Solver once
+#### Running the SAT Solver once
 This is the simplest approach to the problem, since it runs the SAT Solver and keeps waiting for the results.
 
-- #### Running the SAT Solver many times
+#### Running the SAT Solver many times
 This is still a quite simple approach, but can give some improvements if a a lot of computation time is available. This function runs the SAT Solver, but stops it after a given time. If the SAT Solver is stopped, it starts again with a different (random) output. It is only effective on inputs that are not too easy but not too hard to solve.
 
-- #### Learn from previous random tests
+#### Learn from previous random tests
 By giving a score to some easier tests, it is possible to understand which words are easier to use in the SAT Solver, and this information can be used to find the final result.
 
-- #### Get the maximum/minimum of a condition
+#### Get the maximum/minimum of a condition
 This approach is useful because normally, using CNFs, it is impossible to set the value of something to be as big as possible or as low as possible. In order to do that, a linear search or binary search can be used. A good example of this is trying to minimize the size of the table. The function would start by fixing the size to a given value, and, if the CNF is satisfiable with the value, the value is reduced by one and the algorithm starts again. It will eventually stop when the value of the size is so small that the CNF is unsatisfiable or that the SAT Solver takes more time than the given time limit. The same result can be obtained using binary search, but in this task the time gain would not be relevant compared to the time used by the SAT Solver.
 
 ## Results
 
-- #### Metrics
+#### Metrics
 
 Some really simple metrics used to evaluate a crossword are:
+
 - number of letters to number of cells ratio (letters/cells)
+
 - number of letters used by 2 words to number of letters ratio (crossings/letters)
 
-- #### Initial
+#### Initial
 
 This is one of the best results obtained using the script so far.
 
