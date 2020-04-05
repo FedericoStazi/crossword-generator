@@ -6,17 +6,17 @@ import volatile
 #run sat solver
 def solve(dimacs_cnf):
 
-    input_file = open("input.txt", "w")
-    input_file.write(dimacs_cnf)
-    input_file.close()
+    with volatile.file(mode = 'w') as input_file, volatile.file(mode = 'r') as output_file:
 
-    os.system("minisat input.txt output.txt")
+        input_file.write(dimacs_cnf)
+        input_file.close()
 
-    output_file = open("output.txt", "r")
-    result = output_file.read()
-    output_file.close()
+        os.system("minisat " + input_file.name + " " + output_file.name)
 
-    return result
+        result = output_file.read()
+        output_file.close()
+
+        return result
 
 #run sat solver given time limit
 def timed_solve(dimacs_cnf, timeout):
