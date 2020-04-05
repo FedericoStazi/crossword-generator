@@ -47,4 +47,4 @@ def output(input, result):
     for (i,j) in list(result["down"].keys()):
         chars += len(result["down"][i,j])
 
-    print(str(chars)+"/"+str(width*height)+" "+str(chars/(2*width*height)))
+    print(str(chars)+"/"+str(width*height)+" "+str(chars/(width*height)))
