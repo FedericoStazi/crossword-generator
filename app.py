@@ -6,6 +6,7 @@ import result_parser
 import crossword_printer
 
 import time
+import sys
 
 #runs the sat solver once
 def run_simple(size):
@@ -38,5 +39,6 @@ def run_many_cases(size, timeout):
     result = result_parser.parse(input, dimacs_result, var_names)
     crossword_printer.output(input, result)
 
-run_many_cases(10, 30*60)
+minutes = int(sys.argv[1]) if len(sys.argv) > 1 else 10
+run_many_cases(10, minutes*60)
 #run_simple(10)
