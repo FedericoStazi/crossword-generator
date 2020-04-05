@@ -5,33 +5,34 @@ import random
 
 def generate(width, height):
 
-    #TODO get words from a bigger list (check they are lowercase)
     black_cells = []
 
-    for i in range(0):
-        black_cells.append((randint(0, width), randint(0, height)))
+    black_cells.append((0, 0))
+    black_cells.append((0, height - 1))
+    black_cells.append((width - 1, 0))
+    black_cells.append((width - 1, height - 1))
 
     words_file = open("words.txt")
     all_words = json.loads(words_file.read())
     words_file.close()
 
     count = {
-        '2': (5, 1),
+        '2': (4, 1),
         '3': (5, 1),
-        '4': (6, 1),
-        '5': (3, 1),
-        '6': (1, 2),
+        '4': (4, 1),
+        '5': (3, 2),
+        '6': (2, 2),
         '7': (1, 2)
     }
 
     words = []
     for x in count.keys():
         total, group_size = count[x]
+        words_size_x = random.sample(all_words[x], total * group_size)
         for t in range(total):
-            group = []
-            for i in range(group_size):
-                group.append(random.choice(all_words[x]))
-            words.append(group)
+            words.append(words_size_x[group_size*t:group_size*(t+1)])
+
+    print(words)
 
     input = {}
 
