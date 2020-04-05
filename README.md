@@ -303,7 +303,7 @@ DOWN
 (9, 3): mark
 (9, 8): of
 
-letters/cells = 70/100 = 0.35
+letters/cells = 70/100 = 0.7
 ```
 
 ## Author
