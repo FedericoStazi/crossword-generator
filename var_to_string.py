@@ -4,20 +4,20 @@ def nt(b):
 
 #create the c variable as a string
 def c(i, j, s, b=0):
-    return nt(b)+"c_"+str(i)+"_"+str(j)+"_"+s
+    return nt(b)+"c_"+str(i)+","+str(j)+","+s
 
 #create the h variable as a string
 def h(i, j, w, b=0):
-    return nt(b)+"h_"+str(i)+"_"+str(j)+"_"+str(w)
+    return nt(b)+"h_"+str(i)+","+str(j)+","+str(w)
 
 #create the H variable as a string
 def H(i, j, b=0):
-    return nt(b)+"H_"+str(i)+"_"+str(j)
+    return nt(b)+"H_"+str(i)+","+str(j)
 
 #create the v variable as a string
 def v(i, j, w, b=0):
-    return nt(b)+"v_"+str(i)+"_"+str(j)+"_"+str(w)
+    return nt(b)+"v_"+str(i)+","+str(j)+","+str(w)
 
 #create the V variable as a string
 def V(i, j, b=0):
-    return nt(b)+"V_"+str(i)+"_"+str(j)
+    return nt(b)+"V_"+str(i)+","+str(j)
