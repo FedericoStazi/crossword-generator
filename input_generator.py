@@ -1,3 +1,5 @@
+import var_to_string as vts
+
 import json
 import random
 
@@ -5,25 +7,28 @@ import random
 
 def generate(width, height):
 
-    black_cells = []
+    optional = []
 
-    black_cells.append((0, 0))
-    black_cells.append((0, height - 1))
-    black_cells.append((width - 1, 0))
-    black_cells.append((width - 1, height - 1))
+    for i in range(width):
+        optional.append(vts.H(i, 0, 1))
+        optional.append(vts.H(i, height - 1, 1))
 
-    words_file = open("words.txt")
-    all_words = json.loads(words_file.read())
-    words_file.close()
+    for j in range(height):
+        optional.append(vts.V(0, j, 1))
+        optional.append(vts.V(width - 1, j, 1))
 
     count = {
-        '2': (4, 1),
-        '3': (5, 1),
+        '2': (1, 1),
+        '3': (6, 1),
         '4': (4, 1),
         '5': (3, 2),
         '6': (2, 2),
         '7': (1, 2)
     }
+
+    words_file = open("words.txt")
+    all_words = json.loads(words_file.read())
+    words_file.close()
 
     words = []
     for x in count.keys():
@@ -34,11 +39,12 @@ def generate(width, height):
 
     print(words)
 
+
     input = {}
 
     input["height"] = width
     input["width"] = height
-    input["black_cells"] = black_cells
     input["words"] = words
+    input["optional"] = optional
 
     return input
