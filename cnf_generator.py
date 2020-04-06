@@ -1,8 +1,6 @@
 import var_to_string as vts
 import string
 
-BLACK_CELL = '/'
-
 #return true if i,j is inside the table, false otherwise
 def inside(i,j,w,h):
     return i>=0 and i<w and j>=0 and j<h
@@ -10,19 +8,17 @@ def inside(i,j,w,h):
 #generate cnf using extended format
 def generate(input):
 
+    alphabet = (list(string.ascii_lowercase)) + [vts.BLACK_CELL]
+
     output = []
 
     width = input["width"]
     height = input["height"]
-    black_cells = input["black_cells"]
+
     words = input["words"]
     words_flat = [item for sublist in input["words"] for item in sublist]
 
-    alphabet = (list(string.ascii_lowercase)) + [BLACK_CELL]
-
-    # black cells
-    for (i,j) in black_cells:
-        output.append(vts.c(i,j,BLACK_CELL))
+    optional = input["optional"]
 
     # iff conditions for H
     for i in range(width):
@@ -56,17 +52,17 @@ def generate(input):
 
             if inside(i+1,j,width,height):
                 output.append(
-                    ((vts.c(i-1,j,BLACK_CELL,1)+' ') if inside(i-1,j,width,height) else '')+
-                    vts.c(i,j,BLACK_CELL) + ' ' +
-                    vts.c(i+1,j,BLACK_CELL) + ' ' +
+                    ((vts.c(i-1,j,vts.BLACK_CELL,1)+' ') if inside(i-1,j,width,height) else '')+
+                    vts.c(i,j,vts.BLACK_CELL) + ' ' +
+                    vts.c(i+1,j,vts.BLACK_CELL) + ' ' +
                     vts.H(i,j)
                 )
 
             if inside(i,j+1,width,height):
                 output.append(
-                    ((vts.c(i,j-1,BLACK_CELL,1)+' ') if inside(i,j-1,width,height) else '')+
-                    vts.c(i,j,BLACK_CELL) + ' ' +
-                    vts.c(i,j+1,BLACK_CELL) + ' ' +
+                    ((vts.c(i,j-1,vts.BLACK_CELL,1)+' ') if inside(i,j-1,width,height) else '')+
+                    vts.c(i,j,vts.BLACK_CELL) + ' ' +
+                    vts.c(i,j+1,vts.BLACK_CELL) + ' ' +
                     vts.V(i,j)
                 )
 
@@ -100,7 +96,7 @@ def generate(input):
         offset += len(group)
         output.append(' '.join(conditions))
         conditions = []
-        
+
     for w in range(len(words_flat)):
 
         # word at most once in the table
@@ -118,18 +114,18 @@ def generate(input):
             for j in range(height):
 
                 if i>0:
-                    output.append(vts.h(i,j,w,1) + " " + vts.c(i-1,j,BLACK_CELL))
+                    output.append(vts.h(i,j,w,1) + " " + vts.c(i-1,j,vts.BLACK_CELL))
                 for k in range(len(words_flat[w])):
                     output.append(vts.h(i,j,w,1) + " " + vts.c(i+k,j,words_flat[w][k]))
                 if i+len(words_flat[w])<width:
-                    output.append(vts.h(i,j,w,1) + " " + vts.c(i+len(words_flat[w]),j,BLACK_CELL))
+                    output.append(vts.h(i,j,w,1) + " " + vts.c(i+len(words_flat[w]),j,vts.BLACK_CELL))
 
                 if j>0:
-                    output.append(vts.v(i,j,w,1) + " " + vts.c(i,j-1,BLACK_CELL))
+                    output.append(vts.v(i,j,w,1) + " " + vts.c(i,j-1,vts.BLACK_CELL))
                 for k in range(len(words_flat[w])):
                     output.append(vts.v(i,j,w,1) + " " + vts.c(i,j+k,words_flat[w][k]))
                 if j+len(words_flat[w])<height:
-                    output.append(vts.v(i,j,w,1) + " " + vts.c(i,j+len(words_flat[w]),BLACK_CELL))
+                    output.append(vts.v(i,j,w,1) + " " + vts.c(i,j+len(words_flat[w]),vts.BLACK_CELL))
 
         # no words that go out of bounds
         for i in range(width - len(words_flat[w])+1, width):
@@ -139,5 +135,8 @@ def generate(input):
         for i in range(width):
             for j in range(height - len(words_flat[w])+1, height):
                 output.append(vts.v(i,j,w,1))
+
+    for condition in optional:
+        output.append(condition)
 
     return output
