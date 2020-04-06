@@ -37,9 +37,9 @@ This is the structure of the project:
 This script generates the input as a dictionary. This dictionary contains some information such as:
 - height and width of the table
 - the list of words, divided into groups
-- a list of cells that must be black in the table
+- a list of additional constraints for the CNF
 
-This script is crucial because it contains the constraints that can make the crossword better or worse, but that are not necessary to make a crossword valid. These constraints must be chosen carefully because, if they are too many, the SAT solver will not be able to find a solution in a resonable time. The choice of the constraints is discussed [below](#input-data).
+This script is crucial because it contains the constraints that make the crossword valid, but also those that can make it better or worse. These must be chosen carefully because, if they are too many, the SAT solver will not be able to find a solution in a resonable time. The choice of the constraints is discussed [below](#input-data).
 
 #### `cnf_generator.py`
 This script takes the input dictionary and returns the cnf written in an easily readable format. It imposes the constraints necessary for a valid crossword, but also the additional ones contained in the input dictionary. How the cnf describes the constraints of a crossword is described [below](#cnf-constraints).
@@ -74,9 +74,6 @@ The width of the crossword. Together with height, these are the only parameters 
 #### `height`
 The height of the crossword. Together with width, these are the only parameters chosen in `app.py` because of their importance in how long the SAT Solver will take to find a solution to the CNF.
 
-#### `black_cells`
-Some random or specific cells are initially chosen to be black, and are stored as pairs in this list. This ensures that non-trivial solutions are found, and that different solutions are generated when running the script on the same set of words multiple times. This is especially useful when the other constraints are less strict. If there are many strict constraints, it is a good choice to have no cell in the list.
-
 #### `words`
 The words in the crossword are chosen from a dictionary. It is good to have a big dictionary and choosing words randomly to get different results when running the script multiple times.
 
@@ -86,6 +83,10 @@ The words in the crossword are chosen from a dictionary. It is good to have a bi
 - This additional constraint adds a lot of complexity to the CNF, slowing it down significantly.
 
 However, the generator can divide words into groups of size 1, so that there is no difference with a simple list of words where all words must be used.
+
+#### `additional`
+
+This is a CNF, a list whose elements are disjunctions of variables. The constraints contained here are included in the CNF given to the SAT Solver, but differ from those generated in `input_generator` because they are not necessary for the creation of a valid crossword. The reason why this is useful, and which additional constraints could be added, is discussed [here](#additional-constraints).
 
 ### Variables
 
@@ -237,12 +238,16 @@ c_i-1,j,/ ∨ H_i,j ∨ c_i,j,/ ∨ c_i+1,j,/
 
 c_i,j-1,/ ∨ V_i,j ∨ c_i,j,/ ∨ c_i,j+1,/
 
-### Optional constraints
+### Additional constraints
 
 The following constraints are **not** necessary for the CNF to produce a valid crossword. They are however used to improve the quality of the crossword, especially avoiding trivial solutions.
 
+#### No words along the borders
+
+TODO
+
 #### Random black cells
-The cells in `black_cells` must have the symbol '/'. Therefore for each of these cells (i,j), the following clause is in the CNF: 
+Some random or specific cells are initially chosen to be black. This ensures that non-trivial solutions are found, and that different solutions are generated when running the script on the same set of words multiple times. This is especially useful when the other constraints are less strict. If there are many strict constraints, it is a good choice to have no cell in the list. These cells must have the symbol '/', Therefore for each of these cells (i,j), the following clause is in the CNF.
 
 c_i,j,/
 
