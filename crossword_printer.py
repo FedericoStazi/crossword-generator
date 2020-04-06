@@ -1,4 +1,4 @@
-BLACK_CELL = '/'
+import var_to_string as vts
 
 #print dimacs results
 def output(input, result):
@@ -25,7 +25,7 @@ def output(input, result):
     for i in range(width):
         for j in range(height):
             if (i,j) not in table:
-                table[i,j] = BLACK_CELL
+                table[i,j] = vts.BLACK_CELL
 
     for i in range(width):
         for j in range(height):
