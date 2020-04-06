@@ -36,24 +36,9 @@ def run_many_cases(height, width, timeout):
     elif dimacs_result.split("\n")[0] == "UNSAT":
         return
 
-    # debug print, bug not solved yet...
-    if len(dimacs_result.split("\n")) < 2:
-        print(dimacs_result.split("\n"))
-
     result = result_parser.parse(input, dimacs_result, var_names)
     crossword_printer.output(input, result)
 
-# test version of linear_search
-def linear_search(height, width, next, timeout):
-
-    while height > 0 and width > 0:
-
-        print("height = "+str(height)+" width = "+str(width))
-
-        run_many_cases(width, height, timeout)
-
-        height, width = next(height, width)
-
 
 minutes = int(sys.argv[1]) if len(sys.argv) > 1 else 10
-linear_search(8, 16, lambda x,y : (x-1,y-2), minutes * 60)
+run_many_cases(7, 14, minutes * 60)
