@@ -1,3 +1,5 @@
+BLACK_CELL = '/'
+
 #return the not prefix if b is 1
 def nt(b):
     return "-" if b else ""
