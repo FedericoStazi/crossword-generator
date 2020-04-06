@@ -18,7 +18,7 @@ def generate(input):
     words = input["words"]
     words_flat = [item for sublist in input["words"] for item in sublist]
 
-    optional = input["optional"]
+    additional = input["additional"]
 
     # iff conditions for H
     for i in range(width):
@@ -136,7 +136,7 @@ def generate(input):
             for j in range(height - len(words_flat[w])+1, height):
                 output.append(vts.v(i,j,w,1))
 
-    for condition in optional:
+    for condition in additional:
         output.append(condition)
 
     return output

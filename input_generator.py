@@ -3,27 +3,31 @@ import var_to_string as vts
 import json
 import random
 
+def _additional(width, height):
+
+    additional = []
+
+    for i in range(width):
+        additional.append(vts.H(i, 0, 1))
+        additional.append(vts.H(i, height - 1, 1))
+
+    for j in range(height):
+        additional.append(vts.V(0, j, 1))
+        additional.append(vts.V(width - 1, j, 1))
+
+    return additional
+
 #generate input informations as a python dict
 
 def generate(width, height):
 
-    optional = []
-
-    for i in range(width):
-        optional.append(vts.H(i, 0, 1))
-        optional.append(vts.H(i, height - 1, 1))
-
-    for j in range(height):
-        optional.append(vts.V(0, j, 1))
-        optional.append(vts.V(width - 1, j, 1))
-
     count = {
-        '2': (1, 1),
-        '3': (6, 1),
-        '4': (4, 1),
-        '5': (3, 2),
-        '6': (2, 2),
-        '7': (1, 2)
+        '2': (1, 1), #1
+        '3': (4, 1), #6
+        '4': (4, 1), #4
+        '5': (3, 2), #3
+        '6': (2, 2), #2
+        '7': (1, 2)  #1
     }
 
     words_file = open("words.txt")
@@ -39,12 +43,11 @@ def generate(width, height):
 
     print(words)
 
-
     input = {}
 
     input["height"] = width
     input["width"] = height
     input["words"] = words
-    input["optional"] = optional
+    input["additional"] = _additional(height, width)
 
     return input
