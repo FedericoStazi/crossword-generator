@@ -243,8 +243,19 @@ c_i,j-1,/ ∨ V_i,j ∨ c_i,j,/ ∨ c_i,j+1,/
 The following constraints are **not** necessary for the CNF to produce a valid crossword. They are however used to improve the quality of the crossword, especially avoiding trivial solutions.
 
 #### No words along the borders
+Words along the border can sometimes make the crossword look less realistic, because they tend to have less crossings with other words. This reduces the number of solutions, so the same set of words may need a larger table if this additional condition is added.
 
-TODO
+For i from 0 to width - 1:
+
+¬H_i,0
+
+¬H_i,width-1
+
+For j from 0 to height - 1:
+
+¬V_0,j
+
+¬V_height-1,j
 
 #### Random black cells
 Some random or specific cells are initially chosen to be black. This ensures that non-trivial solutions are found, and that different solutions are generated when running the script on the same set of words multiple times. This is especially useful when the other constraints are less strict. If there are many strict constraints, it is a good choice to have no cell in the list. These cells must have the symbol '/', Therefore for each of these cells (i,j), the following clause is in the CNF.
