@@ -286,7 +286,40 @@ Some really simple metrics used to evaluate a crossword are:
 
 #### Initial results
 
-This is one of the best results obtained using the script so far.
+This is one of the results obtained by the script, using the condition of not having words along the border. Considering the additional constraint, the value of letters/cells is quite good (> 0.65). One of the main issues with these results is that there are separate block of words that are not connected. This however only contains two big blocks, and not many small ones.
+
+```
+/ / / / / b / / / c / / f / 
+e a s t / r / / o r i g i n 
+/ c / / f a t / / y / / f / 
+/ c a n / s / k / / a n t s 
+h e / / / s h i r t / / e / 
+/ p i n e / / d / o t h e r 
+/ t / / / / / s / p / / n / 
+
+ACROSS
+(0, 1): east
+(0, 4): he
+(1, 3): can
+(1, 5): pine
+(4, 2): fat
+(5, 4): shirt
+(8, 1): origin
+(9, 5): other
+(10, 3): ants
+
+DOWN
+(1, 1): accept
+(5, 0): brass
+(7, 3): kids
+(9, 0): cry
+(9, 4): top
+(12, 0): fifteen
+
+letters/cells = 64/98 = 0.6530612244897959
+```
+
+This is another of the best results obtained by the script so far.
 
 ```
 b l o w / s h a k e
